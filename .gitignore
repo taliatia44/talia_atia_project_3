@@ -1,0 +1,28 @@
+# Node
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# React (Vite/CRA)
+*.tsbuildinfo
+.cache/
