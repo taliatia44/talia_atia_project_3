@@ -1,10 +1,11 @@
+// routes/followerRoutes.ts
 const express = require("express");
-const { followVacation, unfollowVacation, getUserFollows } = require("../controllers/followerController");
-const { verifyUser } = require("../middleware/auth");
+const { toggleStar } = require("../controllers/followerController");
+const { verifyToken, verifyUser } = require("../middleware/auth");
 
 const router = express.Router();
-router.post("/:vacationId", verifyUser, followVacation);
-router.delete("/:vacationId", verifyUser, unfollowVacation);
-router.get("/:userId", verifyUser, getUserFollows);
+
+router.post("/:id/toggle", verifyToken, verifyUser, toggleStar);
 
 module.exports = router;
+

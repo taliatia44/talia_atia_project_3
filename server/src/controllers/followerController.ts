@@ -1,27 +1,47 @@
-import type { Request, Response } from "express";
+// controllers/followerController.ts
 const db = require("../config/db");
+const jwt = require("jsonwebtoken");
 
-async function followVacation(req: Request, res: Response) {
-  const { vacationId } = req.params;
-  const userId = (req as any).user.id;
-  await db.query("INSERT INTO followers (user_id, vacation_id) VALUES (?, ?)", [userId, vacationId]);
-  res.json({ message: "Vacation followed" });
+import type { AuthRequest } from "../types"; 
+import type { Response } from "express";
+
+
+
+async function toggleStar(req: AuthRequest, res: Response) {
+  try {
+    if (!req.user) {
+  return res.status(401).json({ message: "Unauthorized" });
 }
 
-async function unfollowVacation(req: Request, res: Response) {
-  const { vacationId } = req.params;
-  const userId = (req as any).user.id;
-  await db.query("DELETE FROM followers WHERE user_id=? AND vacation_id=?", [userId, vacationId]);
-  res.json({ message: "Vacation unfollowed" });
+
+    const userId = req.user.id;
+    const vacationId = req.params.id;
+
+    // בדיקה אם כבר מסומן
+    const [rows] = await db.query(
+      "SELECT * FROM followers WHERE user_id=? AND vacation_id=?",
+      [userId, vacationId]
+    );
+
+    if (rows.length > 0) {
+      // הסרה אם קיים
+      await db.query(
+        "DELETE FROM followers WHERE user_id=? AND vacation_id=?",
+        [userId, vacationId]
+      );
+      return res.json({ starred: false });
+    }
+
+    // אחרת מוסיפים
+    await db.query(
+      "INSERT INTO followers (user_id, vacation_id) VALUES (?, ?)",
+      [userId, vacationId]
+    );
+    res.json({ starred: true });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
 }
 
-async function getUserFollows(req: Request, res: Response) {
-  const { userId } = req.params;
-  const [rows] = await db.query(
-    "SELECT v.* FROM vacations v JOIN followers f ON v.id=f.vacation_id WHERE f.user_id=?",
-    [userId]
-  );
-  res.json(rows);
-}
+module.exports = { toggleStar };
 
-module.exports = { followVacation, unfollowVacation, getUserFollows };
