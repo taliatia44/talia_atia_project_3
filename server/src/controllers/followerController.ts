@@ -1,47 +1,32 @@
-// controllers/followerController.ts
+import type { Request, Response } from "express";
 const db = require("../config/db");
-const jwt = require("jsonwebtoken");
 
-import type { AuthRequest } from "../types"; 
-import type { Response } from "express";
-
-
+interface AuthRequest extends Request {
+  user?: any;
+}
 
 async function toggleStar(req: AuthRequest, res: Response) {
   try {
-    if (!req.user) {
-  return res.status(401).json({ message: "Unauthorized" });
-}
-
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
 
     const userId = req.user.id;
     const vacationId = req.params.id;
 
-    // בדיקה אם כבר מסומן
-    const [rows] = await db.query(
+    const [rows]: any = await db.query(
       "SELECT * FROM followers WHERE user_id=? AND vacation_id=?",
       [userId, vacationId]
     );
 
     if (rows.length > 0) {
-      // הסרה אם קיים
-      await db.query(
-        "DELETE FROM followers WHERE user_id=? AND vacation_id=?",
-        [userId, vacationId]
-      );
+      await db.query("DELETE FROM followers WHERE user_id=? AND vacation_id=?", [userId, vacationId]);
       return res.json({ starred: false });
     }
 
-    // אחרת מוסיפים
-    await db.query(
-      "INSERT INTO followers (user_id, vacation_id) VALUES (?, ?)",
-      [userId, vacationId]
-    );
+    await db.query("INSERT INTO followers (user_id, vacation_id) VALUES (?, ?)", [userId, vacationId]);
     res.json({ starred: true });
-  } catch (err) {
-    res.status(500).json({ error: err });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 }
 
 module.exports = { toggleStar };
-

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../Auth.css";
+const PORT = process.env.PORT || 4000
+
+
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +14,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setError("");
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", {
+      const res = await axios.post(`http://localhost:${PORT}/auth/login`, {
         email,
         password,
       });

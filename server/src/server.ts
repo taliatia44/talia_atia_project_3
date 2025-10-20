@@ -1,21 +1,24 @@
 const express = require("express");
-const authRoutes = require("./routes/authRoutes");
-const vacationRoutes = require("./routes/vacationRoutes");
-const followerRoutes = require("./routes/followerRoutes");
-
 import type { Request, Response } from "express";
 
+const dotenv = require("dotenv");
+const authRoutes = require("./routes/authRoutes");
+const followerRoutes = require("./routes/followerRoutes");
+
+dotenv.config();
+
 const app = express();
+const PORT = process.env.PORT || 4000;
+
 app.use(express.json());
 
-app.get("/", (_: Request, res: Response) => {
-  res.send("Server is running 🚀");
+app.use("/api/auth", authRoutes);
+app.use("/api/followers", followerRoutes);
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Server is running");
 });
 
-app.use("/auth", authRoutes);
-app.use("/vacations", vacationRoutes);
-app.use("/followers", followerRoutes);
-
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Dashboard.css";
+const PORT = process.env.PORT || 4000
+
 
 interface Vacation {
   id: number;
@@ -25,7 +27,7 @@ const DashboardPage: React.FC = () => {
   const fetchVacations = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/vacations", {
+      const res = await axios.get(`http://localhost:${PORT}/vacations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVacations(res.data);
@@ -39,7 +41,7 @@ const DashboardPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `http://localhost:5000/followers/${id}/toggle`,
+        `http://localhost:${PORT}/followers/${id}/toggle`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
