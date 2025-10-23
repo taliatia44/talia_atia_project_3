@@ -6,10 +6,9 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const token = localStorage.getItem("token"); // או userRole אם את רוצה גם תפקיד
+  const token = localStorage.getItem("token"); // בדיקת token פשוטה
 
   if (!token) {
-    // אם אין token → שולח ל-login
     return <Navigate to="/login" replace />;
   }
 

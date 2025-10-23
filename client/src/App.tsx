@@ -1,7 +1,9 @@
+// src/App.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
+import MainLayout from "./components/MainLayout";
 import ProtectedRoute from "./components/protectedRoute";
 
 export default function App() {
@@ -11,21 +13,30 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Protected routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* All other routes inside MainLayout */}
+      <Route path="/*" element={<MainLayout />}>
+        {/* Index route – מוצג כברירת מחדל */}
+        <Route
+          index
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        {/* אפשר להוסיף עוד routes פנימיים */}
+        {/* <Route
+          path="somepage"
+          element={
+            <ProtectedRoute>
+              <SomePage />
+            </ProtectedRoute>
+          }
+        /> */}
 
-      {/* Redirect root to dashboard */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-      {/* Fallback */}
-      <Route path="*" element={<div>Not Found</div>} />
+        {/* Route לכל השאר */}
+        <Route path="*" element={<div>Page not found</div>} />
+      </Route>
     </Routes>
   );
 }
