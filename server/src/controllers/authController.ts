@@ -1,54 +1,85 @@
-import type { Request, Response } from "express";
-const db = require("../config/db");
-const jwt = require("jsonwebtoken");
+// src/controllers/authController.ts
+import { Request, Response } from "express";
+import bcrypt from "bcryptjs";
+import db from "../config/db";
+import dotenv from "dotenv";
 
-async function register(req: Request, res: Response) {
+dotenv.config();
+
+// ========================
+// REGISTRATION
+// ========================
+export const register = async (req: Request, res: Response) => {
   try {
-    const { f_name, l_name, email, password } = req.body;
-    if (!f_name || !l_name || !email || !password)
-      return res.status(400).json({ error: "All fields are required" });
+    const { f_name, l_name, email, user_password, user_role } = req.body;
 
-    const [existingUsers]: any = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-    if (existingUsers.length > 0) return res.status(400).json({ error: "User already exists" });
+    if (!email || !user_password || !f_name || !l_name || !user_role) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-    await db.query(
+    // בדיקה אם המשתמש כבר קיים
+    const [existingUsers] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+    const usersArray = existingUsers as any[];
+    if (usersArray.length > 0) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // הצפנת הסיסמה
+    const hashedPassword = await bcrypt.hash(user_password, 10);
+
+    // הוספת המשתמש ל־DB
+    await db.execute(
       "INSERT INTO users (f_name, l_name, email, user_password, user_role) VALUES (?, ?, ?, ?, ?)",
-      [f_name, l_name, email, password, "user"]
+      [f_name, l_name, email, hashedPassword, user_role]
     );
 
-    res.json({ message: "User registered successfully" });
-  } catch (err: any) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(201).json({ message: "Registration successful" });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Registration failed" });
   }
-}
+};
 
-async function login(req: Request, res: Response) {
+// ========================
+// LOGIN
+// ========================
+export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: "Email and password required" });
+    const { email, user_password } = req.body;
 
-    const [rows]: any = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-    if (rows.length === 0) return res.status(401).json({ error: "User not found" });
+    if (!email || !user_password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
 
-    const user = rows[0];
-    if (password !== user.user_password) return res.status(401).json({ error: "Invalid password" });
+    // חיפוש המשתמש ב־DB
+    const [userRows] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+    const users = userRows as any[];
 
-    const token = jwt.sign(
-      { id: user.id, f_name: user.f_name, role: user.user_role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    if (users.length === 0) {
+      return res.status(401).json({ message: "Login failed" });
+    }
 
-    res.json({
+    const user = users[0];
+
+    // בדיקה אם הסיסמה נכונה
+    const isMatch = await bcrypt.compare(user_password, user.user_password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Login failed" });
+    }
+
+    // כאן אפשר להוסיף יצירת JWT או סשן אם צריך
+    res.status(200).json({
       message: "Login successful",
-      token,
-      user: { id: user.id, f_name: user.f_name, role: user.user_role },
+      user: {
+        id: user.id,
+        f_name: user.f_name,
+        l_name: user.l_name,
+        email: user.email,
+        user_role: user.user_role,
+      },
     });
-  } catch (err: any) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Login failed" });
   }
-}
-
-module.exports = { register, login };
+};

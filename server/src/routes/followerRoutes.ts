@@ -1,9 +1,10 @@
-const express = require("express");
-const { toggleStar } = require("../controllers/followerController");
-const { verifyUser } = require("../middleware/auth");
+import express, { Router } from "express";
+import { toggleStar } from "../controllers/followerController";
+import { verifyUser } from "../middleware/auth";
 
-const router = express.Router();
+const router: Router = express.Router();
 
+// המשתמש חייב להיות מאומת לפני ביצוע toggle
 router.post("/:id/toggle", verifyUser, toggleStar);
 
-module.exports = router;
+export default router;

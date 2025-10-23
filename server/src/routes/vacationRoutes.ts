@@ -1,11 +1,20 @@
-const express = require("express");
-const { getVacations, addVacation, updateVacation, deleteVacation } = require("../controllers/vacationController");
-const { verifyAdmin, verifyToken } = require("../middleware/auth");
+import express from "express";
+import {
+  getVacations,
+  addVacation,
+  updateVacation,
+  deleteVacation,
+} from "../controllers/vacationController";
+import { verifyAdmin, verifyUser } from "../middleware/auth";
 
 const router = express.Router();
-router.get("/", verifyToken, getVacations);
+
+// כל המשתמשים רואים חופשות
+router.get("/", getVacations);
+
+// רק אדמין יכול להוסיף / לעדכן / למחוק
 router.post("/", verifyAdmin, addVacation);
 router.put("/:id", verifyAdmin, updateVacation);
 router.delete("/:id", verifyAdmin, deleteVacation);
 
-module.exports = router;
+export default router;

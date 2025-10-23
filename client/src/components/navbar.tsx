@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="p-3 bg-gray-800 text-white flex justify-between">
+    `<nav className="p-3 bg-gray-800 text-white flex justify-between">
       <div className="font-bold text-lg">My App</div>
       <div className="flex gap-4">
         <Link to="/">Home</Link>
@@ -10,6 +10,6 @@ export default function Navbar() {
         <Link to="/login">Login</Link>
         <Link to="/register">Register</Link>
       </div>
-    </nav>
+    </nav>`
   );
 }
