@@ -1,42 +1,23 @@
-// src/App.tsx
+// App.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/navbar";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
-import MainLayout from "./components/MainLayout";
-import ProtectedRoute from "./components/protectedRoute";
 
 export default function App() {
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      {/* All other routes inside MainLayout */}
-      <Route path="/*" element={<MainLayout />}>
-        {/* Index route – מוצג כברירת מחדל */}
-        <Route
-          index
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        {/* אפשר להוסיף עוד routes פנימיים */}
-        {/* <Route
-          path="somepage"
-          element={
-            <ProtectedRoute>
-              <SomePage />
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* Route לכל השאר */}
-        <Route path="*" element={<div>Page not found</div>} />
-      </Route>
-    </Routes>
+    <div className="app">
+      <Navbar /> {/* קבוע בכל הדפים */}
+      <div className="container mx-auto p-4">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<div>Not Found</div>} />
+        </Routes>
+      </div>
+    </div>
   );
 }
