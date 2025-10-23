@@ -1,84 +1,98 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "../Auth.css";
-const PORT = process.env.PORT || 4000
+import { useNavigate } from "react-router-dom";
+import AuthLayout from "../components/AuthLayout";
 
-
-const RegisterPage: React.FC = () => {
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
+export default function Register() {
+  const [f_name, setFName] = useState("");
+  const [l_name, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
+
     try {
-      const res = await axios.post(`http://localhost:${PORT}/auth/register`, {
-        f_name: fName,
-        l_name: lName,
-        email,
-        password,
+      const res = await fetch("http://localhost:4000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          f_name,
+          l_name,
+          email,
+          user_password: password,
+          user_role: role,
+        }),
       });
-      console.log("Registered:", res.data);
-      setSuccess("User registered successfully!");
-      setFName("");
-      setLName("");
-      setEmail("");
-      setPassword("");
-    } catch (err: any) {
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Registration failed");
+        return;
+      }
+
+      navigate("/login");
+    } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Registration failed");
+      setError("Registration failed");
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Register</h2>
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fName"
-            placeholder="First Name"
-            value={fName}
-            onChange={(e) => setFName(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            name="lName"
-            placeholder="Last Name"
-            value={lName}
-            onChange={(e) => setLName(e.target.value)}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Register</button>
-        </form>
-      </div>
-    </div>
+    <AuthLayout title="Register" subtitle="Create a new account">
+      <form onSubmit={handleRegister} className="flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder="First Name"
+          value={f_name}
+          onChange={(e) => setFName(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={l_name}
+          onChange={(e) => setLName(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        {error && <p className="text-red-500">{error}</p>}
+        <button
+          type="submit"
+          className="bg-indigo-700 text-white py-2 rounded hover:bg-indigo-800 transition-colors"
+        >
+          Register
+        </button>
+      </form>
+    </AuthLayout>
   );
-};
-
-export default RegisterPage;
+}

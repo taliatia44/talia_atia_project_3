@@ -8,7 +8,7 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
   return (
-    `<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-10 transform transition-all hover:scale-[1.02]">
         <h1 className="text-3xl font-extrabold text-center text-indigo-700 mb-3">
           {title}
@@ -19,6 +19,6 @@ export default function AuthLayout({ title, subtitle, children }: AuthLayoutProp
 
         <div className="flex flex-col gap-4">{children}</div>
       </div>
-    </div>`
+    </div>
   );
 }

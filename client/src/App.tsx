@@ -1,30 +1,31 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/navbar";
-import Home from "./pages/home";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import ProtectedRoute from "./components/protectedRoute";
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Protected routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Redirect root to dashboard */}
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+      {/* Fallback */}
+      <Route path="*" element={<div>Not Found</div>} />
+    </Routes>
   );
 }
-
-export default App;
