@@ -11,9 +11,9 @@ dotenv.config();
 // ========================
 export const register = async (req: Request, res: Response) => {
   try {
-    const { f_name, l_name, email, user_password, user_role } = req.body;
+    const { f_name, l_name, email, user_password } = req.body;
 
-    if (!email || !user_password || !f_name || !l_name || !user_role) {
+    if (!email || !user_password || !f_name || !l_name ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -30,7 +30,7 @@ export const register = async (req: Request, res: Response) => {
     // הוספת המשתמש ל־DB
     await db.execute(
       "INSERT INTO users (f_name, l_name, email, user_password, user_role) VALUES (?, ?, ?, ?, ?)",
-      [f_name, l_name, email, hashedPassword, user_role]
+      [f_name, l_name, email, hashedPassword, "user"]
     );
 
     res.status(201).json({ message: "Registration successful" });

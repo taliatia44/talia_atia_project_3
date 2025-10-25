@@ -7,7 +7,6 @@ export default function Register() {
   const [l_name, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -24,7 +23,6 @@ export default function Register() {
           l_name,
           email,
           user_password: password,
-          user_role: role,
         }),
       });
 
@@ -77,15 +75,9 @@ export default function Register() {
           className="border p-2 rounded"
           required
         />
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+
         {error && <p className="text-red-500">{error}</p>}
+
         <button
           type="submit"
           className="bg-indigo-700 text-white py-2 rounded hover:bg-indigo-800 transition-colors"

@@ -1,6 +1,6 @@
-DROP SCHEMA IF EXISTS `vacation_managment` ;
-CREATE SCHEMA IF NOT EXISTS `vacation_managment` DEFAULT CHARACTER SET latin1 ;
-USE `vacation_managment` ;
+DROP SCHEMA IF EXISTS `vacation_managment`;
+CREATE SCHEMA IF NOT EXISTS `vacation_managment` DEFAULT CHARACTER SET latin1;
+USE `vacation_managment`;
 
 CREATE TABLE IF NOT EXISTS `users` (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -8,9 +8,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   l_name VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   user_password VARCHAR(100) NOT NULL,
-  user_role VARCHAR(100) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE INDEX id_UNIQUE (id ASC)
+  user_role VARCHAR(100) NOT NULL
 );
 
 INSERT INTO `users` (f_name,l_name,email,user_password,user_role) VALUES 
@@ -18,15 +16,13 @@ INSERT INTO `users` (f_name,l_name,email,user_password,user_role) VALUES
 ('yossi','cohen','yossi@gmail.com','1234','user');
 
 CREATE TABLE IF NOT EXISTS `vacations` (
-  id INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   v_destinition VARCHAR(100) NOT NULL,
   v_description VARCHAR(100) NOT NULL,
   v_from_date DATETIME NOT NULL,
   v_to_date DATETIME NOT NULL,
   v_price INT NOT NULL,
-  v_picture_url VARCHAR(100) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE INDEX id_UNIQUE (id ASC)
+  v_picture_url VARCHAR(100) NOT NULL
 );
 
 INSERT INTO `vacations` (v_destinition, v_description,v_from_date,v_to_date,v_price,v_picture_url) VALUES

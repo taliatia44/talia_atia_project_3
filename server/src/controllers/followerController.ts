@@ -22,20 +22,20 @@ export async function toggleStar(req: AuthRequest, res: Response): Promise<Respo
 
     // משתמשים ישירות ב-Pool, אין צורך ב-getConnection
     const [rows]: any = await db.query(
-      "SELECT * FROM vacation_managment.followers WHERE user_id = ? AND vacation_id = ?",
+      "SELECT * FROM followers WHERE user_id = ? AND vacation_id = ?",
       [userId, vacationId]
     );
 
     if (rows.length > 0) {
       await db.query(
-        "DELETE FROM vacation_managment.followers WHERE user_id = ? AND vacation_id = ?",
+        "DELETE FROM followers WHERE user_id = ? AND vacation_id = ?",
         [userId, vacationId]
       );
       return res.json({ starred: false });
     }
 
     await db.query(
-      "INSERT INTO vacation_managment.followers (user_id, vacation_id) VALUES (?, ?)",
+      "INSERT INTO followers (user_id, vacation_id) VALUES (?, ?)",
       [userId, vacationId]
     );
 

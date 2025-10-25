@@ -6,7 +6,7 @@ dotenv.config();
 
 export const getVacations = async (req: Request, res: Response) => {
   try {
-    const [rows] = await db.execute("SELECT * FROM vacation_managment.vacations");
+    const [rows] = await db.execute("SELECT * FROM vacations");
     return res.json({ data: rows });
   } catch (error) {
     console.error("Error fetching vacations:", error);
@@ -23,7 +23,7 @@ export const addVacation = async (req: Request, res: Response) => {
     }
 
     await db.execute(
-      `INSERT INTO vacation_managment.vacations (v_destinition, v_description, v_from_date, v_to_date, v_price, v_picture_url)
+      `INSERT INTO vacations (v_destinition, v_description, v_from_date, v_to_date, v_price, v_picture_url)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [v_destinition, v_description, v_from_date, v_to_date, v_price, v_picture_url]
     );
@@ -41,7 +41,7 @@ export const updateVacation = async (req: Request, res: Response) => {
     const { v_destinition, v_description, v_from_date, v_to_date, v_price, v_picture_url } = req.body;
 
     await db.execute(
-      `UPDATE vacation_managment.vacations
+      `UPDATE vacations
        SET v_destinition=?, v_description=?, v_from_date=?, v_to_date=?, v_price=?, v_picture_url=?
        WHERE id=?`,
       [v_destinition, v_description, v_from_date, v_to_date, v_price, v_picture_url, id]
@@ -57,7 +57,7 @@ export const updateVacation = async (req: Request, res: Response) => {
 export const deleteVacation = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    await db.execute("DELETE FROM vacation_managment.vacations WHERE id=?", [id]);
+    await db.execute("DELETE FROM vacations WHERE id=?", [id]);
     return res.json({ message: "Vacation deleted successfully" });
   } catch (error) {
     console.error("Error deleting vacation:", error);
