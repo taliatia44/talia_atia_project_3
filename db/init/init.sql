@@ -1,6 +1,6 @@
-DROP SCHEMA IF EXISTS `vacation_managment`;
-CREATE SCHEMA IF NOT EXISTS `vacation_managment` DEFAULT CHARACTER SET latin1;
-USE `vacation_managment`;
+DROP SCHEMA IF EXISTS `vacation_managment`
+CREATE SCHEMA IF NOT EXISTS `vacation_managment` DEFAULT CHARACTER SET latin1
+USE `vacation_managment`
 
 CREATE TABLE IF NOT EXISTS `users` (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   email VARCHAR(100) UNIQUE NOT NULL,
   user_password VARCHAR(100) NOT NULL,
   user_role VARCHAR(100) NOT NULL
-);
+)
 
 INSERT INTO `users` (f_name,l_name,email,user_password,user_role) VALUES 
 ('talia','atia','taliaat@gmail.com','1234','admin'),
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `vacations` (
   v_to_date DATETIME NOT NULL,
   v_price INT NOT NULL,
   v_picture_url VARCHAR(100) NOT NULL
-);
+)
 
 INSERT INTO `vacations` (v_destinition, v_description,v_from_date,v_to_date,v_price,v_picture_url) VALUES
 ('france','paris','2025-10-15 08:00:00','2025-10-22 12:00:00',5213,'some_url'),
@@ -43,6 +43,6 @@ CREATE TABLE IF NOT EXISTS `followers` (
   PRIMARY KEY (user_id, vacation_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (vacation_id) REFERENCES vacations(id)
-);
+)
 
-INSERT INTO `followers` (user_id,vacation_id) VALUES (2,2),(2,3);
+INSERT INTO `followers` (user_id,vacation_id) VALUES (2,2),(2,3)

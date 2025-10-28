@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../pages/Auth.css"; // 👈 אותו קובץ
-import AuthLayout from "../components/AuthLayout";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import "../pages/Auth.css"
+import AuthLayout from "../components/AuthLayout"
 
 export default function Register() {
-  const [f_name, setFName] = useState("");
-  const [l_name, setLName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [f_name, setFName] = useState("")
+  const [l_name, setLName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError("")
 
     try {
       const res = await fetch("http://localhost:4000/api/register", {
@@ -25,19 +25,19 @@ export default function Register() {
           email,
           user_password: password,
         }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (!res.ok) {
-        setError(data.message || "Registration failed");
-        return;
+        setError(data.message || "Registration failed")
+        return
       }
 
-      navigate("/login");
+      navigate("/login")
     } catch (err) {
-      console.error(err);
-      setError("Registration failed");
+      console.error(err)
+      setError("Registration failed")
     }
   };
 
@@ -86,5 +86,5 @@ export default function Register() {
         </form>
       </div>
     </div>
-  );
+  )
 }

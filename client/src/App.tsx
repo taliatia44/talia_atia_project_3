@@ -1,9 +1,8 @@
-// App.tsx
-import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/navbar";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import Dashboard from "./pages/dashboard";
+import { Routes, Route, Navigate } from "react-router-dom"
+import Navbar from "./components/navbar"
+import Login from "./pages/login"
+import Register from "./pages/register"
+import Dashboard from "./pages/dashboard"
 
 export default function App() {
   return (
@@ -19,5 +18,5 @@ export default function App() {
         </Routes>
       </div>
     </div>
-  );
+  )
 }

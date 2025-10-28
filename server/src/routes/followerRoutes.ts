@@ -1,10 +1,9 @@
-import express, { Router } from "express";
-import { toggleStar } from "../controllers/followerController";
-import { verifyUser } from "../middleware/auth";
+import express, { Router } from "express"
+import { toggleStar } from "../controllers/followerController"
+import { verifyUser } from "../middleware/auth"
 
-const router: Router = express.Router();
+const router: Router = express.Router()
 
-// המשתמש חייב להיות מאומת לפני ביצוע toggle
-router.post("/:id/toggle", verifyUser, toggleStar);
+router.post("/:id/toggle", verifyUser, toggleStar)
 
-export default router;
+export default router

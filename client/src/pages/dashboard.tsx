@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Dashboard.css'; // 👈 הוספנו את ה-CSS
-
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import '../pages/Dashboard.css'   
 interface Vacation {
-  id: number;
-  v_destinition: string;
-  v_description: string;
-  v_from_date: string;
-  v_to_date: string;
-  v_price: number;
-  v_picture_url: string;
+  id: number,
+  v_destinition: string,
+  v_description: string,
+  v_from_date: string,
+  v_to_date: string,
+  v_price: number,
+  v_picture_url: string,
 }
 
 export default function Dashboard() {
-  const [vacations, setVacations] = useState<Vacation[]>([]);
+  const [vacations, setVacations] = useState<Vacation[]>([])
 
   useEffect(() => {
     axios
       .get('http://localhost:4000/vacations')
       .then(res => setVacations(res.data.data))
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => console.error(err))
+  }, [])
 
   return (
     <div className="dashboard-container">
@@ -41,5 +40,5 @@ export default function Dashboard() {
         </div>
       ))}
     </div>
-  );
+  )
 }

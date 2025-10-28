@@ -1,39 +1,39 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../pages/Auth.css"; // 👈 הוספנו
-import AuthLayout from "../components/AuthLayout";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import "../pages/Auth.css"
+import AuthLayout from "../components/AuthLayout"
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError("")
 
     try {
       const res = await fetch("http://localhost:4000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, user_password: password }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (!res.ok) {
-        setError(data.message || "Login failed");
-        return;
+        setError(data.message || "Login failed")
+        return
       }
 
-      localStorage.setItem("token", data.token || "dummy");
-      navigate("/data");
+      localStorage.setItem("token", data.token || "dummy")
+      navigate("/data")
     } catch (err) {
-      console.error(err);
-      setError("Login failed");
+      console.error(err)
+      setError("Login failed")
     }
-  };
+  }
 
   return (
     <div className="auth-page">
@@ -64,5 +64,5 @@ export default function Login() {
         </form>
       </div>
     </div>
-  );
+  )
 }

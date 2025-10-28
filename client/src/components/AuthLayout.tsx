@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
 interface AuthLayoutProps {
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
+  title: string,
+  subtitle?: string,
+  children: React.ReactNode,
 }
 
 export default function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
@@ -20,5 +20,5 @@ export default function AuthLayout({ title, subtitle, children }: AuthLayoutProp
         <div className="flex flex-col gap-4">{children}</div>
       </div>
     </div>
-  );
+  )
 }
