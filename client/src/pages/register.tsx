@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../pages/Auth.css"; // 👈 אותו קובץ
 import AuthLayout from "../components/AuthLayout";
 
 export default function Register() {
@@ -41,50 +42,49 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout title="Register" subtitle="Create a new account">
-      <form onSubmit={handleRegister} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="First Name"
-          value={f_name}
-          onChange={(e) => setFName(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={l_name}
-          onChange={(e) => setLName(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
+    <div className="auth-page">
+      <div className="auth-form-container">
+        <h1>Register</h1>
+        <p>Create a new account</p>
 
-        {error && <p className="text-red-500">{error}</p>}
+        <form onSubmit={handleRegister}>
+          <input
+            type="text"
+            placeholder="First Name"
+            value={f_name}
+            onChange={(e) => setFName(e.target.value)}
+            required
+          />
 
-        <button
-          type="submit"
-          className="bg-indigo-700 text-white py-2 rounded hover:bg-indigo-800 transition-colors"
-        >
-          Register
-        </button>
-      </form>
-    </AuthLayout>
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={l_name}
+            onChange={(e) => setLName(e.target.value)}
+            required
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {error && <p className="auth-error">{error}</p>}
+
+          <button type="submit">Register</button>
+        </form>
+      </div>
+    </div>
   );
 }

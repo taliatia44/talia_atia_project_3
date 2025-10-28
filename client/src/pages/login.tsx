@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../pages/Auth.css"; // 👈 הוספנו
 import AuthLayout from "../components/AuthLayout";
 
 export default function Login() {
@@ -26,7 +27,7 @@ export default function Login() {
         return;
       }
 
-      localStorage.setItem("token", data.token || "dummy"); // אם אין JWT, אפשר לשים dummy
+      localStorage.setItem("token", data.token || "dummy");
       navigate("/data");
     } catch (err) {
       console.error(err);
@@ -35,32 +36,33 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout title="Login" subtitle="Enter your credentials">
-      <form onSubmit={handleLogin} className="flex flex-col gap-4">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        {error && <p className="text-red-500">{error}</p>}
-        <button
-          type="submit"
-          className="bg-indigo-700 text-white py-2 rounded hover:bg-indigo-800 transition-colors"
-        >
-          Login
-        </button>
-      </form>
-    </AuthLayout>
+    <div className="auth-page">
+      <div className="auth-form-container">
+        <h1>Login</h1>
+        <p>Enter your credentials</p>
+
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {error && <p className="auth-error">{error}</p>}
+
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </div>
   );
 }

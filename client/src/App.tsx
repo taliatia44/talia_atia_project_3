@@ -8,7 +8,7 @@ import Dashboard from "./pages/dashboard";
 export default function App() {
   return (
     <div className="app">
-      <Navbar /> {/* קבוע בכל הדפים */}
+      <Navbar /> {}
       <div className="container mx-auto p-4">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />

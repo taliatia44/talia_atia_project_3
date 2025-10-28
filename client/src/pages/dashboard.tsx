@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Dashboard.css'; // 👈 הוספנו את ה-CSS
 
 interface Vacation {
   id: number;
@@ -22,15 +23,21 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="dashboard-container">
       {vacations.map(v => (
-        <div key={v.id} className="p-4 border rounded shadow">
-          <h2 className="font-bold text-xl">{v.v_destinition}</h2>
-          <p>{v.v_description}</p>
-          <p>
-            {v.v_from_date} - {v.v_to_date}
-          </p>
-          <p className="font-semibold">${v.v_price}</p>
+        <div key={v.id} className="vacation-card">
+          {v.v_picture_url && (
+            <img src={v.v_picture_url} alt={v.v_destinition} />
+          )}
+
+          <div className="vacation-card-content">
+            <h2>{v.v_destinition}</h2>
+            <p>{v.v_description}</p>
+            <p className="vacation-dates">
+              {v.v_from_date} - {v.v_to_date}
+            </p>
+            <p className="vacation-price">${v.v_price}</p>
+          </div>
         </div>
       ))}
     </div>
