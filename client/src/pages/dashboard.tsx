@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import '../pages/Dashboard.css'   
+import '../Dashboard.css'   
 interface Vacation {
   id: number,
   v_destinition: string,

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import "../pages/Auth.css"
+import "../Auth.css"
 import AuthLayout from "../components/AuthLayout"
 
 export default function Login() {
