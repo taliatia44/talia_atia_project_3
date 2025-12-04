@@ -13,13 +13,14 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "All fields are required" })
     }
 
-    const [existingUsers] = await db.execute("SELECT * FROM users WHERE email = ?", [email])
+    const [existingUsers] = await db.execute("SELECT 1 FROM users WHERE email = ?", [email])
     const usersArray = existingUsers as any[]
     if (usersArray.length > 0) {
       return res.status(400).json({ message: "User already exists" })
     }
 
-    const hashedPassword = await bcrypt.hash(user_password, 10)
+    const hashedPassword = user_password
+    // const hashedPassword = await bcrypt.hash(user_password, 10)
 
     await db.execute(
       "INSERT INTO users (f_name, l_name, email, user_password, user_role) VALUES (?, ?, ?, ?, ?)",
@@ -27,7 +28,8 @@ export const register = async (req: Request, res: Response) => {
     )
 
     res.status(201).json({ message: "Registration successful" })
-  } catch (err) {
+  }
+   catch (err) {
     console.error("Registration error:", err)
     res.status(500).json({ message: "Registration failed" })
   }
@@ -41,8 +43,9 @@ export const login = async (req: Request, res: Response) => {
     if (!email || !user_password) {
       return res.status(400).json({ message: "Email and password required" })
     }
-
-    const [userRows] = await db.execute("SELECT * FROM users WHERE email = ?", [email])
+       const hashedPassword = user_password
+    // const hashedPassword = await bcrypt.hash(user_password, 10)
+    const [userRows] = await db.execute("SELECT * FROM users WHERE email = ? and user_password = ?", [email,hashedPassword])
     const users = userRows as any[]
 
     if (users.length === 0) {
@@ -50,11 +53,6 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const user = users[0]
-
-    const isMatch = await bcrypt.compare(user_password, user.user_password)
-    if (!isMatch) {
-      return res.status(401).json({ message: "Login failed" })
-    }
 
     res.status(200).json({
       message: "Login successful",
